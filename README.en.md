@@ -8,7 +8,7 @@
 [![MIT licence](https://img.shields.io/badge/licence-MIT-6c7dff)](LICENSE)
 [![Node ≥ 20](https://img.shields.io/badge/node-%E2%89%A5%2020-3c873a)](https://nodejs.org)
 [![100% local](https://img.shields.io/badge/data-100%25%20local-46d6c0)](#data-privacy-and-local-processing)
-[![No API key](https://img.shields.io/badge/API%20key-optional-f5a623)](#engines)
+[![No API key](https://img.shields.io/badge/API%20key-optional-f5a623)](#execution-engines)
 
 🇫🇷 [Lire en français](README.md)
 
@@ -22,7 +22,7 @@
 
 ---
 
-## Why this exists
+## Context and origin
 
 Everyone reaches a point where they have to tell the story of their career. A new graduate starting out, a professional realigning their path, or simply someone looking for the words today's market actually uses: the task is the same every time. Compress years of work into a single page, and make that page say at a glance who you are and where your value lies.
 
@@ -53,7 +53,7 @@ You fix things, upload a v2, and the system compares: what improved, what regres
 
 ---
 
-## The rule that matters
+## The integrity constraint
 
 > **The system is not allowed to invent.**
 
@@ -69,7 +69,7 @@ This is deliberately frustrating. It is also the only setting that makes the too
 
 ---
 
-## Getting started
+## Installation and setup
 
 ```bash
 git clone https://github.com/spykernv/open-ats.git
@@ -117,7 +117,7 @@ Open **http://localhost:3777**. The sidebar tells you live whether a session is 
 
 ---
 
-## Any agent can run it
+## Agent interoperability
 
 **open-ats ships no model and trains none.** It orchestrates an agent you supply. The program itself reads files, waits, and checks what comes back.
 
@@ -135,7 +135,7 @@ The server validates `result.json` against that stage's Zod schema. If it doesn'
 
 ---
 
-## How it works
+## Pipeline architecture
 
 <p align="center">
   <picture>
@@ -152,7 +152,7 @@ Shared stages (posting, company research, thesis, opportunity) are computed once
 
 ---
 
-## The interface
+## Interface
 
 <table>
 <tr>
@@ -189,7 +189,7 @@ Shared stages (posting, company research, thesis, opportunity) are computed once
 
 ---
 
-## Engines
+## Execution engines
 
 The engine can be switched **live** from the interface, without restarting the server.
 
@@ -229,7 +229,7 @@ open-ats runs on your machine, for you. It is not a multi-user service, and that
 
 ---
 
-## Going further
+## Further documentation
 
 - **[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)** : the map of the code, the 16 stages in detail, the HTTP API, and how to plug in your own engine or search provider.
 - `server/prompts/*.md` : **the prompts are in plain sight, one file per agent.** That's where the real substance lives: read `_core_rules.md` first, it's the integrity contract every agent shares.
@@ -260,7 +260,7 @@ Then, in another terminal, `npm test`. End to end: creation, 16-stage pipeline, 
 
 ---
 
-## Take it, break it, improve it
+## Reuse and contributions
 
 MIT licensed, so do what you like with it. A few directions if you're tempted:
 
@@ -272,7 +272,7 @@ Issues and PRs are welcome, and first-hand feedback even more so, especially if 
 
 ---
 
-## If you want to turn it into a product
+## Paths to productisation
 
 What is published here is a local tool, and it will stay that way. The two obvious extensions are not in this repository:
 
@@ -283,7 +283,7 @@ I have documented the product next steps and the business model for both, and an
 
 ---
 
-## A word on the exercise itself
+## The value of the exercise
 
 Writing your CV and summarising your own career is undervalued work, sometimes rushed, squeezed into a Sunday evening between two applications. I have come to believe it is one of the most important things you can do for your career.
 

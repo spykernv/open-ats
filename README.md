@@ -8,7 +8,7 @@
 [![Licence MIT](https://img.shields.io/badge/licence-MIT-6c7dff)](LICENSE)
 [![Node ≥ 20](https://img.shields.io/badge/node-%E2%89%A5%2020-3c873a)](https://nodejs.org)
 [![100% local](https://img.shields.io/badge/données-100%25%20locales-46d6c0)](#confidentialité-et-traitement-local)
-[![Sans clé API](https://img.shields.io/badge/clé%20API-optionnelle-f5a623)](#les-moteurs)
+[![Sans clé API](https://img.shields.io/badge/clé%20API-optionnelle-f5a623)](#moteurs-dexécution)
 
 🇬🇧 [Read this in English](README.en.md)
 
@@ -18,7 +18,7 @@
 
 ---
 
-## Pourquoi ce projet existe
+## Contexte et genèse
 
 On arrive tous à un moment où il faut raconter son parcours. Jeune diplômé qui se lance, professionnel qui veut réaligner sa trajectoire, ou simplement quelqu'un qui cherche les mots justes du marché d'aujourd'hui : dans tous les cas l'exercice est le même. Condenser des années de travail en une page, et faire que cette page dise en un coup d'œil qui vous êtes et où se trouve votre valeur.
 
@@ -49,7 +49,7 @@ Vous corrigez, vous re-déposez une v2, et le système compare : ce qui a progre
 
 ---
 
-## La règle qui compte
+## Contrainte d'intégrité
 
 > **Le système n'a pas le droit d'inventer.**
 
@@ -65,7 +65,7 @@ C'est volontairement frustrant. C'est aussi le seul réglage qui rend l'outil ut
 
 ---
 
-## Démarrage
+## Installation et démarrage
 
 ```bash
 git clone https://github.com/spykernv/open-ats.git
@@ -113,7 +113,7 @@ Ouvrez **http://localhost:3777**. L'encart « Pont Claude » de la barre latéra
 
 ---
 
-## N'importe quel agent peut le faire tourner
+## Interopérabilité des agents
 
 **open-ats n'embarque aucun modèle et n'en entraîne aucun.** Il orchestre un agent que vous fournissez. Le programme, lui, lit des fichiers, attend, et vérifie ce qui revient.
 
@@ -131,7 +131,7 @@ Le serveur valide `result.json` contre le schéma Zod de l'étape. S'il n'est pa
 
 ---
 
-## Comment ça marche
+## Architecture de la pipeline
 
 <p align="center">
   <picture>
@@ -148,7 +148,7 @@ Les étapes partagées (offre, recherche entreprise, thèse, opportunité) ne so
 
 ---
 
-## L'interface
+## Interface
 
 <table>
 <tr>
@@ -185,7 +185,7 @@ Les étapes partagées (offre, recherche entreprise, thèse, opportunité) ne so
 
 ---
 
-## Les moteurs
+## Moteurs d'exécution
 
 Le moteur se change **à chaud** depuis l'interface, sans redémarrer le serveur.
 
@@ -225,7 +225,7 @@ open-ats tourne sur votre machine, pour vous. Ce n'est pas un service multi-util
 
 ---
 
-## Aller plus loin
+## Documentation complémentaire
 
 - **[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)** : la carte du code, le détail des 16 étapes, l'API HTTP, et comment brancher votre propre moteur ou moteur de recherche.
 - `server/prompts/*.md` : **les prompts sont en clair, un fichier par agent.** C'est là que se trouve la vraie substance du projet : lisez `_core_rules.md` en premier, c'est le contrat d'intégrité que tous les agents partagent.
@@ -256,7 +256,7 @@ Puis, dans un autre terminal, `npm test`. Test de bout en bout : création, pipe
 
 ---
 
-## Reprenez-le, cassez-le, améliorez-le
+## Réutilisation et contributions
 
 Le projet est sous licence MIT : faites-en ce que vous voulez. Quelques pistes si l'envie vous prend :
 
@@ -268,7 +268,7 @@ Les issues et les PR sont bienvenues, et les retours d'expérience encore plus, 
 
 ---
 
-## Si vous voulez en faire un produit
+## Pistes d'industrialisation
 
 Ce qui est publié ici est un outil local, et il le restera. Les deux prolongements évidents, eux, ne sont pas dans ce dépôt :
 
@@ -279,7 +279,7 @@ J'ai documenté les prochaines étapes produit et le modèle d'affaires des deux
 
 ---
 
-## Un mot sur l'exercice lui-même
+## La valeur de la démarche
 
 Écrire son CV et faire la synthèse de son parcours, c'est un travail sous-valorisé, parfois bâclé, expédié un dimanche soir entre deux candidatures. Je crois au contraire que c'est un des plus importants qu'on fasse pour sa carrière.
 
