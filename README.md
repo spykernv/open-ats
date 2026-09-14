@@ -7,7 +7,7 @@
 
 [![Licence MIT](https://img.shields.io/badge/licence-MIT-6c7dff)](LICENSE)
 [![Node ≥ 20](https://img.shields.io/badge/node-%E2%89%A5%2020-3c873a)](https://nodejs.org)
-[![100% local](https://img.shields.io/badge/données-100%25%20locales-46d6c0)](#vos-données-ne-quittent-jamais-votre-machine)
+[![100% local](https://img.shields.io/badge/données-100%25%20locales-46d6c0)](#confidentialité-et-traitement-local)
 [![Sans clé API](https://img.shields.io/badge/clé%20API-optionnelle-f5a623)](#les-moteurs)
 
 🇬🇧 [Read this in English](README.en.md)
@@ -28,13 +28,13 @@ Alors j'ai reconstruit la boîte noire, en clair, à partir de ce qu'on sait pub
 
 **Voyez-le comme un tailleur.** Un bon tailleur ne vous déguise pas : il prend vos mesures, taille dans le tissu que vous avez déjà, et fait ressortir ce que vous avez de meilleur. Puis il vous dit comment ajuster la coupe selon l'endroit où vous voulez aller, et il vous dit franchement quand une pièce ne vous va pas. C'est ce que fait open-ats avec votre parcours : il mesure, il ajuste, et il vous montre ce qui vous correspond vraiment et ce qui ne vous correspond pas.
 
-Le premier enseignement, chez moi, a été un décalage de vocabulaire et non de compétence. J'écrivais « automatisation du reporting hebdomadaire » là où le poste cherchait « analyse de données ». Même travail, mots différents, signal perdu. Voir un système me le dire noir sur blanc, critère par critère, preuve par preuve, a changé ma façon de me présenter.
+Le premier enseignement, chez moi, a été un décalage de vocabulaire et non de compétence. J'avais écrit « automatisation de la coordination projet entre le point client et le lancement du sprint, en Scrum ». L'annonce, elle, cherchait quelqu'un capable de « traduire le besoin client en user stories priorisées ». C'est le même travail : ce que j'avais automatisé, c'est exactement le passage du compte rendu de réunion au backlog prêt à démarrer. Mais ma formulation mettait en avant l'outil que j'avais construit, là où le poste cherchait la compétence produit qu'il avait fallu pour le construire. Le critère est donc ressorti « non couvert », alors que la preuve était là. Voir un système me le dire noir sur blanc, critère par critère, preuve par preuve, a changé ma façon de me présenter.
 
 Depuis, ce système m'a ouvert des portes que je n'espérais pas et m'a fait rencontrer des gens remarquables. Je le publie parce que je n'ai aucune raison de le garder pour moi : il est à vous.
 
 ---
 
-## Ce que ça fait
+## Déroulé d'une analyse
 
 Vous déposez trois choses : **l'annonce** (captures d'écran, PDF ou texte), **votre CV**, et **votre lettre** si vous en avez une. Seize étapes s'enchaînent ensuite : quatorze sont confiées à un agent, une quinzième compare vos versions dès la v2, et le rapport final est assemblé en code. Ensemble, elles vont :
 
@@ -73,7 +73,7 @@ cd open-ats
 npm install
 ```
 
-### Voir à quoi ça ressemble, en 2 minutes et sans rien consommer
+### Démonstration hors ligne, en deux minutes
 
 Le mode `mock` remplit la pipeline avec des données factices : parfait pour visiter l'interface avant de décider si le projet vous intéresse.
 
@@ -95,7 +95,7 @@ npm run demo
 
 Une candidature fictive complète est créée et analysée de bout en bout. Ouvrez **http://localhost:3777**.
 
-### Pour de vrai
+### Utilisation en conditions réelles
 
 **Aucune clé API n'est nécessaire.** Par défaut, le moteur est **votre propre session d'agent** : l'application dépose chaque étape dans une file de fichiers, votre agent la prend, fait le travail lui-même (lire les captures d'écran et les PDF, chercher sur le web, rédiger, produire le JSON), et répond.
 
@@ -200,9 +200,9 @@ Ajouter un moteur = **ajouter un fichier** dans `server/llm/`. Les messages de l
 
 ---
 
-## Vos données ne quittent jamais votre machine
+## Confidentialité et traitement local
 
-Ce point n'est pas négociable, alors il est câblé dans le projet plutôt que promis dans une doc :
+**Vos données ne quittent jamais votre machine.** Ce point n'est pas négociable, alors il est câblé dans le projet plutôt que promis dans une doc :
 
 - Tout vit dans `applications/<id>/` sur **votre disque**. Aucun service tiers, aucune base de données, aucune télémétrie.
 - `applications/`, `bridge/queue/`, `bridge/archive/` et `.env` sont **git-ignorés**. Vous ne pouvez pas committer votre CV par accident.

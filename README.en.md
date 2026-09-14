@@ -7,7 +7,7 @@
 
 [![MIT licence](https://img.shields.io/badge/licence-MIT-6c7dff)](LICENSE)
 [![Node ≥ 20](https://img.shields.io/badge/node-%E2%89%A5%2020-3c873a)](https://nodejs.org)
-[![100% local](https://img.shields.io/badge/data-100%25%20local-46d6c0)](#your-data-never-leaves-your-machine)
+[![100% local](https://img.shields.io/badge/data-100%25%20local-46d6c0)](#data-privacy-and-local-processing)
 [![No API key](https://img.shields.io/badge/API%20key-optional-f5a623)](#engines)
 
 🇫🇷 [Lire en français](README.md)
@@ -32,13 +32,13 @@ So I rebuilt the black box in the open, from what is publicly known about how AT
 
 **Think of it as a tailor.** A good tailor does not disguise you: they take your measurements, cut into the cloth you already have, and bring out your best. Then they tell you how to adjust the cut for where you want to go, and they tell you honestly when a piece does not suit you. That is what open-ats does with your career: it measures, it adjusts, and it shows you what genuinely fits you and what does not.
 
-For me, the first thing it surfaced was a vocabulary gap, not a skills gap. I was writing "automated weekly reporting" where the role was looking for "data analysis". Same work, different words, signal lost. Having a system say so plainly, requirement by requirement, evidence by evidence, changed how I present myself.
+For me, the first thing it surfaced was a vocabulary gap, not a skills gap. I had written "automated the project coordination between the client meeting and the sprint kick-off, in Scrum". The posting was looking for someone who could "translate client needs into a prioritised backlog". It is the same work: what I had automated was precisely the path from meeting notes to a backlog ready to start. But my wording put forward the tool I had built, where the role was looking for the product skill it took to build it. So the requirement came back "not covered", when the evidence was right there. Having a system say so plainly, requirement by requirement, evidence by evidence, changed how I present myself.
 
 Since then it has opened doors I did not expect and introduced me to remarkable people. I am publishing it because I have no reason to keep it to myself: it is yours.
 
 ---
 
-## What it does
+## Anatomy of an analysis
 
 You drop in three things: **the job posting** (screenshots, PDF or plain text), **your CV**, and **your cover letter** if you have one. Sixteen stages then run: fourteen are handed to an agent, a fifteenth compares your versions from v2 onwards, and the final report is assembled in code. Together they:
 
@@ -77,7 +77,7 @@ cd open-ats
 npm install
 ```
 
-### See what it looks like, in 2 minutes, consuming nothing
+### Offline demonstration, in two minutes
 
 `mock` mode fills the pipeline with canned data: ideal for touring the interface before deciding whether the project is for you.
 
@@ -99,7 +99,7 @@ npm run demo
 
 A complete fictional application is created and analysed end to end. Open **http://localhost:3777**.
 
-### For real
+### Running with a live engine
 
 **No API key needed.** By default the engine is **your own agent session**: the app drops each stage into a file queue, your agent picks it up, does the work itself (reading screenshots and PDFs, searching the web, writing, producing JSON), and answers.
 
@@ -204,9 +204,9 @@ Adding an engine means **adding one file** under `server/llm/`. Pipeline message
 
 ---
 
-## Your data never leaves your machine
+## Data privacy and local processing
 
-This isn't negotiable, so it's wired into the project rather than promised in a doc:
+**Your data never leaves your machine.** This isn't negotiable, so it's wired into the project rather than promised in a doc:
 
 - Everything lives in `applications/<id>/` on **your disk**. No third-party service, no database, no telemetry.
 - `applications/`, `bridge/queue/`, `bridge/archive/` and `.env` are **git-ignored**. You can't commit your CV by accident.
