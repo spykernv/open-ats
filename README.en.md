@@ -3,7 +3,7 @@
 # open-ats
 
 **An AI recruiting system, rebuilt by hand and opened up.**
-*Run your application through the machine — before a real one runs it.*
+*Run your application through the machine, before a real one runs it.*
 
 [![MIT licence](https://img.shields.io/badge/licence-MIT-6c7dff)](LICENSE)
 [![Node ≥ 20](https://img.shields.io/badge/node-%E2%89%A5%2020-3c873a)](https://nodejs.org)
@@ -16,7 +16,7 @@
 
 </div>
 
-> **Note** — the interface is in French, because I built it for myself first.
+> **Note** : the interface is in French, because I built it for myself first.
 > The prompts, the code and this documentation are in English. Translating the UI
 > is [a good first issue](https://github.com/spykernv/open-ats/issues) if you fancy it.
 
@@ -24,13 +24,13 @@
 
 ## Why this exists
 
-When you apply somewhere, your CV is read by software first. It gets parsed, scored, ranked, filtered — and in most cases a human only sees it after that sorting has happened. The process is invisible to you. All you get is the outcome: a polite rejection, or silence.
+When you apply somewhere, your CV is read by software first. It gets parsed, scored, ranked, filtered, and in most cases a human only sees it after that sorting has happened. The process is invisible to you. All you get is the outcome: a polite rejection, or silence.
 
-That frustrated me for a long time. Not because it's unfair — a recruiter facing 800 applications genuinely needs to sort them — but because **it's a black box that candidates are asked to submit to without ever being shown the inside.**
+That frustrated me for a long time. Not because it's unfair, a recruiter facing 800 applications genuinely needs to sort them, but because **it's a black box that candidates are asked to submit to without ever being shown the inside.**
 
 So I did the opposite. I rebuilt the black box in the open, from what is publicly known about how ATS and AI screening tools work: posting parsing, requirement matrices, multi-filter scoring, the twenty-second review, benchmarking against the likely applicant pool. Then I put myself through it.
 
-**What I found surprised me.** Most of my applications weren't failing on a missing skill — they were failing on wording. I wrote "automated weekly reporting" where the role was looking for "data analysis". Same work, different vocabulary, filter missed. Having a system tell me that plainly, requirement by requirement, evidence by evidence, changed how I apply.
+**What I found surprised me.** Most of my applications weren't failing on a missing skill, they were failing on wording. I wrote "automated weekly reporting" where the role was looking for "data analysis". Same work, different vocabulary, filter missed. Having a system tell me that plainly, requirement by requirement, evidence by evidence, changed how I apply.
 
 Since then this system has opened doors I didn't expect, and introduced me to remarkable people. I'm publishing it because I have no reason to keep it to myself: if you're job hunting right now, it's yours.
 
@@ -38,16 +38,16 @@ Since then this system has opened doors I didn't expect, and introduced me to re
 
 ## What it does
 
-You drop in three things — **the job posting** (screenshots, PDF or plain text), **your CV**, and **your cover letter** if you have one. Sixteen agents then take turns to:
+You drop in three things: **the job posting** (screenshots, PDF or plain text), **your CV**, and **your cover letter** if you have one. Sixteen agents then take turns to:
 
-1. **Understand the role** — reconstruct the posting and extract a requirement matrix (`MUST_HAVE`, `STRONG_SIGNAL`, `NICE_TO_HAVE`, context, culture), separating what is stated explicitly from what is merely inferred.
-2. **Understand the company** — web research, with every finding tagged `FACT`, `STRONG_INFERENCE` or `WEAK_INFERENCE` and sourced. Then model *why this role exists* and what the realistic ideal candidate looks like.
-3. **Score you** — out of 100, broken down into the four filters that match the four moments an application dies: the **automated screen (ATS)**, the **recruiter screen**, the **hiring manager**, and **strategic fit**.
-4. **Attack you** — an adversarial agent looks for reasons to reject you in twenty seconds; another benchmarks you against the likely applicant pool.
-5. **Rewrite** — an improvement plan ranked by return on effort, then a rewritten CV and cover letter.
-6. **Verify** — and this is the heart of it: a quality controller re-reads every rewritten sentence and **blocks anything your original CV doesn't prove.**
+1. **Understand the role**: reconstruct the posting and extract a requirement matrix (`MUST_HAVE`, `STRONG_SIGNAL`, `NICE_TO_HAVE`, context, culture), separating what is stated explicitly from what is merely inferred.
+2. **Understand the company**: web research, with every finding tagged `FACT`, `STRONG_INFERENCE` or `WEAK_INFERENCE` and sourced. Then model *why this role exists* and what the realistic ideal candidate looks like.
+3. **Score you**: out of 100, broken down into the four filters that match the four moments an application dies: the **automated screen (ATS)**, the **recruiter screen**, the **hiring manager**, and **strategic fit**.
+4. **Attack you**: an adversarial agent looks for reasons to reject you in twenty seconds; another benchmarks you against the likely applicant pool.
+5. **Rewrite**: an improvement plan ranked by return on effort, then a rewritten CV and cover letter.
+6. **Verify**, and this is the heart of it: a quality controller re-reads every rewritten sentence and **blocks anything your original CV doesn't prove.**
 
-You fix things, upload a v2, and the system compares: what improved, what regressed, what still blocks. Until it tells you either *this is ready*, or — just as usefully — *the document has hit its ceiling, the remaining gap is a real experience gap, stop rewriting and change channel.*
+You fix things, upload a v2, and the system compares: what improved, what regressed, what still blocks. Until it tells you either *this is ready*, or, just as usefully, *the document has hit its ceiling, the remaining gap is a real experience gap, stop rewriting and change channel.*
 
 ---
 
@@ -55,15 +55,15 @@ You fix things, upload a v2, and the system compares: what improved, what regres
 
 > **The system is not allowed to invent.**
 
-Before any rewriting, an agent extracts an **Evidence Bank** from your CV: the list of what you can actually prove. Every sentence produced afterwards must point back to one of those pieces of evidence. The quality controller blocks the rest — and when it can't phrase something without knowing, it leaves an explicit marker:
+Before any rewriting, an agent extracts an **Evidence Bank** from your CV: the list of what you can actually prove. Every sentence produced afterwards must point back to one of those pieces of evidence. The quality controller blocks the rest, and when it can't phrase something without knowing, it leaves an explicit marker:
 
 ```
-[TO COMPLETE: which language this project used — I cannot infer it from the CV]
+[TO COMPLETE: which language this project used, I cannot infer it from the CV]
 ```
 
 This is deliberately frustrating. It is also the only setting that makes the tool useful: an optimised application that collapses at the first interview question has wasted your time and the recruiter's.
 
-**This is not a keyword stuffer.** It refuses to insert the vocabulary of a domain you haven't worked in, even when doing so would mechanically raise the score. It exists to help you **say what is true, better** — not to say something else.
+**This is not a keyword stuffer.** It refuses to insert the vocabulary of a domain you haven't worked in, even when doing so would mechanically raise the score. It exists to help you **say what is true, better**, not to say something else.
 
 ---
 
@@ -77,7 +77,7 @@ npm install
 
 ### See what it looks like, in 2 minutes, consuming nothing
 
-`mock` mode fills the pipeline with canned data — ideal for touring the interface before deciding whether the project is for you.
+`mock` mode fills the pipeline with canned data: ideal for touring the interface before deciding whether the project is for you.
 
 ```bash
 LLM_PROVIDER=mock MOCK_DELAY_MS=1200 npm start
@@ -99,13 +99,13 @@ A complete fictional application is created and analysed end to end. Open **http
 npm start
 ```
 
-Then, **inside your Claude Code session** (or any agent — see below):
+Then, **inside your Claude Code session** (or any agent, see below):
 
 ```bash
 npm run bridge
 ```
 
-Open **http://localhost:3777**. The sidebar tells you live whether a session is listening, what it's working on, and what's queued. If the bridge disconnects, the pipeline **waits** — it doesn't fail. Restart `npm run bridge` and it resumes.
+Open **http://localhost:3777**. The sidebar tells you live whether a session is listening, what it's working on, and what's queued. If the bridge disconnects, the pipeline **waits**, it doesn't fail. Restart `npm run bridge` and it resumes.
 
 ---
 
@@ -162,7 +162,7 @@ flowchart TB
   P1 --> P2 --> P3 --> P4 --> P5
 ```
 
-The final verdict (`APPLY NOW` / `IMPROVE FIRST` / `LOW PRIORITY` / `DO NOT APPLY`) is **computed in code**, not by the model — same input, same output, every time. Same for the Markdown report and the PDF exports: they're assembled from the JSON artifacts with no model call.
+The final verdict (`APPLY NOW` / `IMPROVE FIRST` / `LOW PRIORITY` / `DO NOT APPLY`) is **computed in code**, not by the model: same input, same output, every time. Same for the Markdown report and the PDF exports: they're assembled from the JSON artifacts with no model call.
 
 Shared stages (posting, company research, thesis, opportunity) are computed once per application and reused across versions.
 
@@ -176,16 +176,16 @@ Shared stages (posting, company research, thesis, opportunity) are computed once
 <td width="50%"><img src="docs/screenshots/03-requirements.png" alt="Requirement to evidence matrix"></td>
 </tr>
 <tr>
-<td><b>Summary</b> — seven scores, the verdict, the change since the previous version, and the twenty-second rejection risks.</td>
-<td><b>Requirements &amp; Evidence</b> — every requirement in the posting against what your CV actually proves, with the crucial distinction between a <i>positioning gap</i> (fixable by rewriting) and an <i>actual experience gap</i> (not fixable).</td>
+<td><b>Summary</b>: seven scores, the verdict, the change since the previous version, and the twenty-second rejection risks.</td>
+<td><b>Requirements &amp; Evidence</b>: every requirement in the posting against what your CV actually proves, with the crucial distinction between a <i>positioning gap</i> (fixable by rewriting) and an <i>actual experience gap</i> (not fixable).</td>
 </tr>
 <tr>
 <td><img src="docs/screenshots/04-cv-optimise.png" alt="Optimised CV and integrity check"></td>
 <td><img src="docs/screenshots/01-dashboard.png" alt="Applications dashboard"></td>
 </tr>
 <tr>
-<td><b>Optimised CV</b> — the rewrite, a before/after for each bullet, and the integrity check that approved (or blocked) every sentence.</td>
-<td><b>Dashboard</b> — every application ranked by score, with its verdict, version and submission status.</td>
+<td><b>Optimised CV</b>: the rewrite, a before/after for each bullet, and the integrity check that approved (or blocked) every sentence.</td>
+<td><b>Dashboard</b>: every application ranked by score, with its verdict, version and submission status.</td>
 </tr>
 </table>
 
@@ -195,11 +195,11 @@ Shared stages (posting, company research, thesis, opportunity) are computed once
 
 | | |
 |---|---|
-| <img src="docs/screenshots/06-nouvelle-analyse.png" alt="New analysis"> | **New analysis** — drop the posting, the CV, the letter. The letter is optional: without one, the system drafts it from your Evidence Bank. |
-| <img src="docs/screenshots/05-recherche.png" alt="Company research"> | **Company & Thesis** — the web research, each finding tagged by confidence level and sourced, then the recruiting model. |
-| <img src="docs/screenshots/07-console.png" alt="Console"> | **Console** — a free-form question to your agent, with access to your analysis folders: "compare these two applications", "re-read this bullet". |
+| <img src="docs/screenshots/06-nouvelle-analyse.png" alt="New analysis"> | **New analysis**: drop the posting, the CV, the letter. The letter is optional: without one, the system drafts it from your Evidence Bank. |
+| <img src="docs/screenshots/05-recherche.png" alt="Company research"> | **Company & Thesis**: the web research, each finding tagged by confidence level and sourced, then the recruiting model. |
+| <img src="docs/screenshots/07-console.png" alt="Console"> | **Console**: a free-form question to your agent, with access to your analysis folders: "compare these two applications", "re-read this bullet". |
 
-*(Screenshots taken in demo mode — the `[MOCK]` markers are the offline mode's canned data.)*
+*(Screenshots taken in demo mode. The `[MOCK]` markers are the offline mode's canned data.)*
 
 </details>
 
@@ -226,7 +226,7 @@ This isn't negotiable, so it's wired into the project rather than promised in a 
 
 - Everything lives in `applications/<id>/` on **your disk**. No third-party service, no database, no telemetry.
 - `applications/`, `bridge/queue/`, `bridge/archive/` and `.env` are **git-ignored**. You can't commit your CV by accident.
-- In `claude-session` mode the bridge only moves local files — no secret passes through it.
+- In `claude-session` mode the bridge only moves local files, no secret passes through it.
 - PDF exports are rendered locally by `pdfkit`. No headless browser, no conversion service.
 
 This repository contains no real application: the only dataset is fictional and generated by `npm run demo`.
@@ -235,8 +235,8 @@ This repository contains no real application: the only dataset is fictional and 
 
 ## Going further
 
-- **[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)** — the map of the code, the 16 stages in detail, the HTTP API, and how to plug in your own engine or search provider.
-- `server/prompts/*.md` — **the prompts are in plain sight, one file per agent.** That's where the real substance lives: read `_core_rules.md` first, it's the integrity contract every agent shares.
+- **[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)** : the map of the code, the 16 stages in detail, the HTTP API, and how to plug in your own engine or search provider.
+- `server/prompts/*.md` : **the prompts are in plain sight, one file per agent.** That's where the real substance lives: read `_core_rules.md` first, it's the integrity contract every agent shares.
 
 ### Tests
 
@@ -255,31 +255,35 @@ End to end: creation, 16-stage pipeline, report, v2 upload, re-evaluation, compa
 
 ## Take it, break it, improve it
 
-MIT licensed — do what you like with it. A few directions if you're tempted:
+MIT licensed, so do what you like with it. A few directions if you're tempted:
 
-- **Retune the prompts for your field.** They're calibrated for junior business and data profiles. A senior profile, an engineering role or a non-French market deserve different settings — it's all in `server/prompts/`.
+- **Retune the prompts for your field.** They're calibrated for junior business and data profiles. A senior profile, an engineering role or a non-French market deserve different settings, it's all in `server/prompts/`.
 - **Plug in your agent.** The bridge is just the filesystem: if your agent reads and writes files, it can be the engine.
 - **Add a filter.** The four-filter model reflects my understanding of hiring. Yours may well be better.
 
-Issues and PRs are welcome, and first-hand feedback even more so — especially if you've used it for real. If part of the code isn't clear, that's on me: open an issue and I'll fix it.
+Issues and PRs are welcome, and first-hand feedback even more so, especially if you've used it for real. If part of the code isn't clear, that's on me: open an issue and I'll fix it.
 
 ---
 
-## One word if you're job hunting
+## A word on the exercise itself
 
-Looking for work is exhausting, and an automated rejection never tells you why. That silence is what this tool tries to fill: not to make you look like someone else, but so you finally know **where you actually stand** — and can spend your energy where it changes something.
+Writing your CV and summarising your own career is undervalued work, sometimes rushed, squeezed into a Sunday evening between two applications. I have come to believe it is one of the most important things you can do for your career.
 
-Sometimes the most useful answer this system gives is "this application is structurally weak, stop rewriting". That stings for a moment. It saves weeks.
+Taking the time for a real retrospective. Sitting down and looking at where your strengths actually were. Looking at what your CV says about you, then comparing it with what the people who have worked with you say about you: the gap between the two is often the most instructive part of the whole exercise. That is what lets you align better with what you want to do, explore where the market is moving, and reposition yourself.
 
-Good luck, genuinely. You are worth more than what a first automated screen says about you.
+For me it was an excellent complement to writing my thesis on an AI agent management system for steering a digital product. The two fed each other. And that is what stayed with the people I spoke to: not the document itself, but the clarity the exercise had given me about the market, about where I would bring the most value, and about what genuinely excites me intellectually.
+
+That is what I hope you find in it. The optimised CV is only a by-product.
+
+If the subject interests you, my thesis is currently under moderation on HAL and will be available here: <https://hal.science/view/index/docid/5735731>
 
 ---
 
 <div align="center">
 
-**Jonathan Naal** · [LinkedIn](https://www.linkedin.com/in/jonathannaal/)
+**Jonathan Naal**
 
-If this project is useful to you, tell me — that's the best thanks there is.
+For more about my background, or about working together, here is my [LinkedIn](https://www.linkedin.com/in/jonathannaal/).
 
 <sub>MIT · Not affiliated with any ATS vendor or model provider.</sub>
 
