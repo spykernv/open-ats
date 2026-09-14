@@ -12,7 +12,7 @@
 
 🇫🇷 [Lire en français](README.md)
 
-<img src="docs/screenshots/08-pipeline.png" alt="The 16-agent pipeline running live" width="820">
+<img src="docs/screenshots/08-pipeline.png" alt="The 16-stage pipeline running live" width="820">
 
 </div>
 
@@ -40,7 +40,7 @@ Since then it has opened doors I did not expect and introduced me to remarkable 
 
 ## What it does
 
-You drop in three things: **the job posting** (screenshots, PDF or plain text), **your CV**, and **your cover letter** if you have one. Sixteen agents then take turns to:
+You drop in three things: **the job posting** (screenshots, PDF or plain text), **your CV**, and **your cover letter** if you have one. Sixteen stages then run: fourteen are handed to an agent, a fifteenth compares your versions from v2 onwards, and the final report is assembled in code. Together they:
 
 1. **Understand the role**: reconstruct the posting and extract a requirement matrix (`MUST_HAVE`, `STRONG_SIGNAL`, `NICE_TO_HAVE`, context, culture), separating what is stated explicitly from what is merely inferred.
 2. **Understand the company**: web research, with every finding tagged `FACT`, `STRONG_INFERENCE` or `WEAK_INFERENCE` and sourced. Then model *why this role exists* and what the realistic ideal candidate looks like.
@@ -82,7 +82,13 @@ npm install
 `mock` mode fills the pipeline with canned data: ideal for touring the interface before deciding whether the project is for you.
 
 ```bash
+# macOS, Linux
 LLM_PROVIDER=mock MOCK_DELAY_MS=1200 npm start
+```
+
+```powershell
+# Windows PowerShell
+$env:LLM_PROVIDER="mock"; $env:MOCK_DELAY_MS="1200"; npm start
 ```
 
 Then, in a second terminal:
@@ -112,6 +118,8 @@ Open **http://localhost:3777**. The sidebar tells you live whether a session is 
 ---
 
 ## Any agent can run it
+
+**open-ats ships no model and trains none.** It orchestrates an agent you supply. The program itself reads files, waits, and checks what comes back.
 
 The bridge isn't an integration. It's **a directory of files**.
 
@@ -209,6 +217,18 @@ This repository contains no real application: the only dataset is fictional and 
 
 ---
 
+## Deliberate choices
+
+open-ats runs on your machine, for you. It is not a multi-user service, and that is not a missing step: it is what makes the guarantee above possible. Here is what follows from it, and what each decision costs.
+
+- **JSON files rather than a database.** An application is a folder you can open, copy, version and delete by hand. The price is visible in the code: `server/storage/` writes to a temporary file then renames it, with retries, because the interface reads while the pipeline writes.
+- **The interface polls every two seconds or so** rather than opening an SSE stream. On stages that take minutes the latency is invisible, and there is no connection state to manage.
+- **JavaScript, with Zod at the boundaries.** The untrusted data here is not the code I write, it is what a model returns. Only runtime validation catches that, which is the job of the fifteen schemas, one per agent. Static typing would be a useful complement, not a replacement.
+- **The verdict is tested case by case, the rest end to end.** `npm run test:unit` pins the verdict thresholds and the precedence between its rules; the E2E test in mock mode covers the whole pipeline while consuming nothing.
+- **The prompts are calibrated for junior and VIE profiles** in business and data. Another profile or another market needs retuning, and it is all in plain sight under `server/prompts/`.
+
+---
+
 ## Going further
 
 - **[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)** : the map of the code, the 16 stages in detail, the HTTP API, and how to plug in your own engine or search provider.
@@ -217,15 +237,26 @@ This repository contains no real application: the only dataset is fictional and 
 ### Tests
 
 ```bash
+npm run test:unit
+```
+Tests the deterministic verdict: thresholds, precedence between the rules, edge cases. Instant, no server, no dependency.
+
+```bash
 npm run test:bridge
 ```
 Tests the bridge alone (job queue, schema validation, automatic repair). No server, no session required.
 
 ```bash
-LLM_PROVIDER=mock npm start     # then, in another terminal:
-npm test
+# macOS, Linux
+LLM_PROVIDER=mock npm start
 ```
-End to end: creation, 16-stage pipeline, report, v2 upload, re-evaluation, comparison. In mock mode it consumes nothing.
+
+```powershell
+# Windows PowerShell
+$env:LLM_PROVIDER="mock"; npm start
+```
+
+Then, in another terminal, `npm test`. End to end: creation, 16-stage pipeline, report, v2 upload, re-evaluation, comparison. In mock mode it consumes nothing.
 
 ---
 
@@ -238,6 +269,17 @@ MIT licensed, so do what you like with it. A few directions if you're tempted:
 - **Add a filter.** The four-filter model reflects my understanding of hiring. Yours may well be better.
 
 Issues and PRs are welcome, and first-hand feedback even more so, especially if you've used it for real. If part of the code isn't clear, that's on me: open an issue and I'll fix it.
+
+---
+
+## If you want to turn it into a product
+
+What is published here is a local tool, and it will stay that way. The two obvious extensions are not in this repository:
+
+- **On the candidate side**, an online service where you drop in a CV without installing anything.
+- **On the company side**, a decision-support tool for HR teams, applying the same evidence requirement to the applications they receive.
+
+I have documented the product next steps and the business model for both, and an enterprise implementation roadmap is already under way with HR professionals who want to push it. The code is MIT licensed, so you need nobody's permission; but if this is something you seriously want to move forward, write to me on [LinkedIn](https://www.linkedin.com/in/jonathannaal/) rather than starting from scratch.
 
 ---
 

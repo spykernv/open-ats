@@ -12,7 +12,7 @@
 
 🇬🇧 [Read this in English](README.en.md)
 
-<img src="docs/screenshots/08-pipeline.png" alt="La pipeline de 16 agents qui s'exécute en direct" width="820">
+<img src="docs/screenshots/08-pipeline.png" alt="La pipeline de 16 étapes qui s'exécute en direct" width="820">
 
 </div>
 
@@ -36,7 +36,7 @@ Depuis, ce système m'a ouvert des portes que je n'espérais pas et m'a fait ren
 
 ## Ce que ça fait
 
-Vous déposez trois choses : **l'annonce** (captures d'écran, PDF ou texte), **votre CV**, et **votre lettre** si vous en avez une. Seize agents se relaient ensuite pour :
+Vous déposez trois choses : **l'annonce** (captures d'écran, PDF ou texte), **votre CV**, et **votre lettre** si vous en avez une. Seize étapes s'enchaînent ensuite : quatorze sont confiées à un agent, une quinzième compare vos versions dès la v2, et le rapport final est assemblé en code. Ensemble, elles vont :
 
 1. **Comprendre le poste** : reconstruire l'annonce, en extraire une matrice de critères (`MUST_HAVE`, `STRONG_SIGNAL`, `NICE_TO_HAVE`, contexte, culture), en distinguant ce qui est écrit noir sur blanc de ce qui est simplement inféré.
 2. **Comprendre l'entreprise** : recherche web, avec chaque constat étiqueté `FACT`, `STRONG_INFERENCE` ou `WEAK_INFERENCE` et sa source. Puis modéliser *pourquoi ce poste existe* et à quoi ressemble réellement le candidat attendu.
@@ -78,7 +78,13 @@ npm install
 Le mode `mock` remplit la pipeline avec des données factices : parfait pour visiter l'interface avant de décider si le projet vous intéresse.
 
 ```bash
+# macOS, Linux
 LLM_PROVIDER=mock MOCK_DELAY_MS=1200 npm start
+```
+
+```powershell
+# Windows PowerShell
+$env:LLM_PROVIDER="mock"; $env:MOCK_DELAY_MS="1200"; npm start
 ```
 
 Puis, dans un second terminal :
@@ -108,6 +114,8 @@ Ouvrez **http://localhost:3777**. L'encart « Pont Claude » de la barre latéra
 ---
 
 ## N'importe quel agent peut le faire tourner
+
+**open-ats n'embarque aucun modèle et n'en entraîne aucun.** Il orchestre un agent que vous fournissez. Le programme, lui, lit des fichiers, attend, et vérifie ce qui revient.
 
 Le pont n'est pas une intégration : c'est **un répertoire de fichiers**.
 
@@ -205,6 +213,18 @@ Ce dépôt ne contient aucune candidature réelle : le seul jeu de données est 
 
 ---
 
+## Choix assumés
+
+open-ats tourne sur votre machine, pour vous. Ce n'est pas un service multi-utilisateur, et ce n'est pas une étape qui manque : c'est la condition de la garantie ci-dessus. Voici les décisions qui en découlent, et ce qu'elles coûtent.
+
+- **Des fichiers JSON plutôt qu'une base de données.** Une candidature est un dossier que vous pouvez ouvrir, copier, versionner et supprimer à la main. Le prix se lit dans le code : `server/storage/` écrit dans un fichier temporaire puis renomme, avec des réessais, parce que l'interface lit pendant que la pipeline écrit.
+- **L'interface interroge le serveur toutes les deux secondes environ** plutôt que d'ouvrir un flux SSE. Sur des étapes qui durent des minutes, la latence ne se voit pas, et il n'y a aucun état de connexion à gérer.
+- **JavaScript, avec Zod aux frontières.** La donnée non fiable, ici, ce n'est pas le code que j'écris : c'est ce que renvoie un modèle. Seule une validation à l'exécution l'attrape, et c'est le rôle des quinze schémas, un par agent. Un typage statique serait un complément utile, pas un remplacement.
+- **Le verdict est testé cas par cas, le reste de bout en bout.** `npm run test:unit` fige les seuils et l'ordre de priorité du verdict ; le test E2E en mode mock couvre la pipeline entière sans rien consommer.
+- **Les prompts sont calibrés pour des profils junior et VIE**, en business et en data. Sur un autre profil ou un autre marché, ils demandent un réglage, et tout est en clair dans `server/prompts/`.
+
+---
+
 ## Aller plus loin
 
 - **[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)** : la carte du code, le détail des 16 étapes, l'API HTTP, et comment brancher votre propre moteur ou moteur de recherche.
@@ -213,15 +233,26 @@ Ce dépôt ne contient aucune candidature réelle : le seul jeu de données est 
 ### Tests
 
 ```bash
+npm run test:unit
+```
+Teste le verdict déterministe : seuils, ordre de priorité des règles, cas limites. Instantané, aucun serveur, aucune dépendance.
+
+```bash
 npm run test:bridge
 ```
 Teste le pont seul (file de jobs, validation de schéma, réparation automatique). Aucun serveur, aucune session requise.
 
 ```bash
-LLM_PROVIDER=mock npm start     # puis, dans un autre terminal :
-npm test
+# macOS, Linux
+LLM_PROVIDER=mock npm start
 ```
-Test de bout en bout : création, pipeline 16 étapes, rapport, dépôt d'une v2, ré-évaluation, comparaison. En mode mock, ne consomme rien.
+
+```powershell
+# Windows PowerShell
+$env:LLM_PROVIDER="mock"; npm start
+```
+
+Puis, dans un autre terminal, `npm test`. Test de bout en bout : création, pipeline 16 étapes, rapport, dépôt d'une v2, ré-évaluation, comparaison. En mode mock, ne consomme rien.
 
 ---
 
@@ -234,6 +265,17 @@ Le projet est sous licence MIT : faites-en ce que vous voulez. Quelques pistes s
 - **Ajoutez un filtre.** Le modèle à quatre filtres reflète ma compréhension du processus de recrutement. La vôtre est peut-être meilleure.
 
 Les issues et les PR sont bienvenues, et les retours d'expérience encore plus, surtout si vous l'avez utilisé pour de vrai. Si une partie du code n'est pas claire, c'est un défaut de ma part : ouvrez une issue, je corrigerai.
+
+---
+
+## Si vous voulez en faire un produit
+
+Ce qui est publié ici est un outil local, et il le restera. Les deux prolongements évidents, eux, ne sont pas dans ce dépôt :
+
+- **Côté candidat**, un service en ligne où l'on dépose son CV sans rien installer.
+- **Côté entreprise**, un outil d'aide à la décision pour les équipes RH, qui applique la même exigence de preuve à la lecture des candidatures reçues.
+
+J'ai documenté les prochaines étapes produit et le modèle d'affaires des deux, et une roadmap d'implémentation en entreprise est déjà en cours avec des professionnels RH qui veulent la pousser. Le code est sous licence MIT, vous n'avez besoin de la permission de personne ; mais si c'est un sujet sur lequel vous voulez avancer sérieusement, écrivez-moi sur [LinkedIn](https://www.linkedin.com/in/jonathannaal/) plutôt que de repartir de zéro.
 
 ---
 
