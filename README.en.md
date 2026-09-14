@@ -128,38 +128,34 @@ The server validates `result.json` against that stage's Zod schema. If it doesn'
 ## How it works
 
 ```mermaid
-flowchart LR
-  IN["📄 Posting<br/>📄 CV<br/>✉️ Letter"] --> P1
+flowchart TB
+  IN["📄 Posting · 📄 CV · ✉️ Letter"] --> P1
 
-  subgraph P1["1 · Understand"]
-    direction TB
-    a1["job_parser<br/><i>posting → requirements</i>"] --> a2["company_researcher<br/><i>web, sourced findings</i>"]
-    a2 --> a3["recruiting_modeler<br/><i>why this role exists</i>"]
-    a3 --> a4["opportunity_scorer"]
+  subgraph P1["1 · Understand the role"]
+    direction LR
+    a1["job_parser<br/>posting → requirements"] --> a2["company_researcher<br/>web, sourced findings"] --> a3["recruiting_modeler<br/>why this role exists"] --> a4["opportunity_scorer<br/>/100"]
   end
 
   subgraph P2["2 · Prove"]
-    direction TB
-    b1["cv_extractor<br/><i>Evidence Bank</i>"] --> b2["requirement_mapper<br/><i>requirement → evidence</i>"]
+    direction LR
+    b1["cv_extractor<br/>Evidence Bank"] --> b2["requirement_mapper<br/>requirement → evidence"]
   end
 
   subgraph P3["3 · Judge"]
-    direction TB
-    c1["cv_evaluator<br/><i>ATS · HR · HM · Fit</i>"] --> c2["adversarial_reviewer"]
+    direction LR
+    c1["cv_evaluator<br/>ATS · HR · HM · Fit"] --> c2["adversarial_reviewer"]
     c1 --> c3["competitive_benchmark"]
     c1 --> c4["letter_evaluator"]
   end
 
   subgraph P4["4 · Rewrite"]
-    direction TB
-    d1["improvement_planner<br/><i>ranked by ROI</i>"] --> d2["cv_optimizer"]
-    d1 --> d3["letter_optimizer"]
-    d2 --> d4["quality_controller<br/><i>blocks the unproven</i>"]
-    d3 --> d4
+    direction LR
+    d1["improvement_planner<br/>ranked by ROI"] --> d2["cv_optimizer"] --> d4["quality_controller<br/>blocks the unproven"]
+    d1 --> d3["letter_optimizer"] --> d4
   end
 
   subgraph P5["5 · Decide"]
-    direction TB
+    direction LR
     e1["version_comparator"] --> e2["verdict + report"]
   end
 

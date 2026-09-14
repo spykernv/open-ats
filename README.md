@@ -124,38 +124,34 @@ Le serveur valide `result.json` contre le schéma Zod de l'étape. S'il n'est pa
 ## Comment ça marche
 
 ```mermaid
-flowchart LR
-  IN["📄 Annonce<br/>📄 CV<br/>✉️ Lettre"] --> P1
+flowchart TB
+  IN["📄 Annonce · 📄 CV · ✉️ Lettre"] --> P1
 
-  subgraph P1["1 · Comprendre"]
-    direction TB
-    a1["job_parser<br/><i>annonce → critères</i>"] --> a2["company_researcher<br/><i>web, sources tracées</i>"]
-    a2 --> a3["recruiting_modeler<br/><i>pourquoi ce poste existe</i>"]
-    a3 --> a4["opportunity_scorer"]
+  subgraph P1["1 · Comprendre le poste"]
+    direction LR
+    a1["job_parser<br/>annonce → critères"] --> a2["company_researcher<br/>web, sources tracées"] --> a3["recruiting_modeler<br/>pourquoi ce poste existe"] --> a4["opportunity_scorer<br/>/100"]
   end
 
   subgraph P2["2 · Prouver"]
-    direction TB
-    b1["cv_extractor<br/><i>Evidence Bank</i>"] --> b2["requirement_mapper<br/><i>critère → preuve</i>"]
+    direction LR
+    b1["cv_extractor<br/>Evidence Bank"] --> b2["requirement_mapper<br/>critère → preuve"]
   end
 
   subgraph P3["3 · Juger"]
-    direction TB
-    c1["cv_evaluator<br/><i>ATS · RH · HM · Fit</i>"] --> c2["adversarial_reviewer"]
+    direction LR
+    c1["cv_evaluator<br/>ATS · RH · HM · Fit"] --> c2["adversarial_reviewer"]
     c1 --> c3["competitive_benchmark"]
     c1 --> c4["letter_evaluator"]
   end
 
   subgraph P4["4 · Réécrire"]
-    direction TB
-    d1["improvement_planner<br/><i>classé par ROI</i>"] --> d2["cv_optimizer"]
-    d1 --> d3["letter_optimizer"]
-    d2 --> d4["quality_controller<br/><i>bloque le non-prouvé</i>"]
-    d3 --> d4
+    direction LR
+    d1["improvement_planner<br/>classé par ROI"] --> d2["cv_optimizer"] --> d4["quality_controller<br/>bloque le non-prouvé"]
+    d1 --> d3["letter_optimizer"] --> d4
   end
 
   subgraph P5["5 · Décider"]
-    direction TB
+    direction LR
     e1["version_comparator"] --> e2["verdict + rapport"]
   end
 
