@@ -1,0 +1,32 @@
+flowchart TB
+  IN["Posting · CV · Letter"] --> P1
+
+  subgraph P1["1 · Understand the role"]
+    direction LR
+    a1["job_parser<br/>posting → requirements"] --> a2["company_researcher<br/>web, sourced findings"] --> a3["recruiting_modeler<br/>why this role exists"] --> a4["opportunity_scorer<br/>/100"]
+  end
+
+  subgraph P2["2 · Prove"]
+    direction LR
+    b1["cv_extractor<br/>Evidence Bank"] --> b2["requirement_mapper<br/>requirement → evidence"]
+  end
+
+  subgraph P3["3 · Judge"]
+    direction LR
+    c1["cv_evaluator<br/>ATS · HR · HM · Fit"] --> c2["adversarial_reviewer"]
+    c1 --> c3["competitive_benchmark"]
+    c1 --> c4["letter_evaluator"]
+  end
+
+  subgraph P4["4 · Rewrite"]
+    direction LR
+    d1["improvement_planner<br/>ranked by ROI"] --> d2["cv_optimizer"] --> d4["quality_controller<br/>blocks the unproven"]
+    d1 --> d3["letter_optimizer"] --> d4
+  end
+
+  subgraph P5["5 · Decide"]
+    direction LR
+    e1["version_comparator"] --> e2["verdict + report"]
+  end
+
+  P1 --> P2 --> P3 --> P4 --> P5

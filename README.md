@@ -123,40 +123,14 @@ Le serveur valide `result.json` contre le schéma Zod de l'étape. S'il n'est pa
 
 ## Comment ça marche
 
-```mermaid
-flowchart TB
-  IN["📄 Annonce · 📄 CV · ✉️ Lettre"] --> P1
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/diagrams/pipeline-dark.svg">
+    <img alt="Les 16 étapes de la pipeline, en cinq phases" src="docs/diagrams/pipeline-light.svg" width="820">
+  </picture>
+</p>
 
-  subgraph P1["1 · Comprendre le poste"]
-    direction LR
-    a1["job_parser<br/>annonce → critères"] --> a2["company_researcher<br/>web, sources tracées"] --> a3["recruiting_modeler<br/>pourquoi ce poste existe"] --> a4["opportunity_scorer<br/>/100"]
-  end
-
-  subgraph P2["2 · Prouver"]
-    direction LR
-    b1["cv_extractor<br/>Evidence Bank"] --> b2["requirement_mapper<br/>critère → preuve"]
-  end
-
-  subgraph P3["3 · Juger"]
-    direction LR
-    c1["cv_evaluator<br/>ATS · RH · HM · Fit"] --> c2["adversarial_reviewer"]
-    c1 --> c3["competitive_benchmark"]
-    c1 --> c4["letter_evaluator"]
-  end
-
-  subgraph P4["4 · Réécrire"]
-    direction LR
-    d1["improvement_planner<br/>classé par ROI"] --> d2["cv_optimizer"] --> d4["quality_controller<br/>bloque le non-prouvé"]
-    d1 --> d3["letter_optimizer"] --> d4
-  end
-
-  subgraph P5["5 · Décider"]
-    direction LR
-    e1["version_comparator"] --> e2["verdict + rapport"]
-  end
-
-  P1 --> P2 --> P3 --> P4 --> P5
-```
+<sub>Source du diagramme : [`docs/diagrams/pipeline.mmd`](docs/diagrams/pipeline.mmd) (mermaid). Les SVG sont statiques pour s'afficher partout, y compris hors de GitHub.</sub>
 
 Le verdict final (`APPLY NOW` / `IMPROVE FIRST` / `LOW PRIORITY` / `DO NOT APPLY`) est **calculé en code**, pas par le modèle : même entrée, même sortie, toujours. Idem pour le rapport Markdown et les exports PDF : ils sont assemblés à partir des artefacts JSON, sans appel au modèle.
 

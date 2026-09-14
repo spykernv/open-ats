@@ -127,40 +127,14 @@ The server validates `result.json` against that stage's Zod schema. If it doesn'
 
 ## How it works
 
-```mermaid
-flowchart TB
-  IN["📄 Posting · 📄 CV · ✉️ Letter"] --> P1
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/diagrams/pipeline-en-dark.svg">
+    <img alt="The 16 pipeline stages, in five phases" src="docs/diagrams/pipeline-en-light.svg" width="820">
+  </picture>
+</p>
 
-  subgraph P1["1 · Understand the role"]
-    direction LR
-    a1["job_parser<br/>posting → requirements"] --> a2["company_researcher<br/>web, sourced findings"] --> a3["recruiting_modeler<br/>why this role exists"] --> a4["opportunity_scorer<br/>/100"]
-  end
-
-  subgraph P2["2 · Prove"]
-    direction LR
-    b1["cv_extractor<br/>Evidence Bank"] --> b2["requirement_mapper<br/>requirement → evidence"]
-  end
-
-  subgraph P3["3 · Judge"]
-    direction LR
-    c1["cv_evaluator<br/>ATS · HR · HM · Fit"] --> c2["adversarial_reviewer"]
-    c1 --> c3["competitive_benchmark"]
-    c1 --> c4["letter_evaluator"]
-  end
-
-  subgraph P4["4 · Rewrite"]
-    direction LR
-    d1["improvement_planner<br/>ranked by ROI"] --> d2["cv_optimizer"] --> d4["quality_controller<br/>blocks the unproven"]
-    d1 --> d3["letter_optimizer"] --> d4
-  end
-
-  subgraph P5["5 · Decide"]
-    direction LR
-    e1["version_comparator"] --> e2["verdict + report"]
-  end
-
-  P1 --> P2 --> P3 --> P4 --> P5
-```
+<sub>Diagram source: [`docs/diagrams/pipeline.en.mmd`](docs/diagrams/pipeline.en.mmd) (mermaid). The SVGs are static so they render everywhere, including outside GitHub.</sub>
 
 The final verdict (`APPLY NOW` / `IMPROVE FIRST` / `LOW PRIORITY` / `DO NOT APPLY`) is **computed in code**, not by the model: same input, same output, every time. Same for the Markdown report and the PDF exports: they're assembled from the JSON artifacts with no model call.
 
