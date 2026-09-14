@@ -42,13 +42,23 @@ async function ensureDir(dir) {
   await fs.promises.mkdir(dir, { recursive: true });
 }
 
+/** Errors Windows raises while another process holds the same file open. */
+const SHARING_ERRORS = ["EBUSY", "EPERM", "EACCES"];
+
 export async function readJson(filePath) {
-  try {
-    // Tolerate a UTF-8 BOM (files edited by external tools on Windows).
-    return JSON.parse((await fs.promises.readFile(filePath, "utf8")).replace(/^﻿/, ""));
-  } catch (error) {
-    if (error.code === "ENOENT") return null;
-    throw error;
+  for (let attempt = 0; ; attempt++) {
+    try {
+      // Tolerate a UTF-8 BOM (files edited by external tools on Windows).
+      return JSON.parse((await fs.promises.readFile(filePath, "utf8")).replace(/^﻿/, ""));
+    } catch (error) {
+      if (error.code === "ENOENT") return null;
+      // The pipeline may be rewriting this file right now: a half-written read or a
+      // sharing violation both settle within milliseconds. Genuinely malformed JSON
+      // still throws, just a few milliseconds later.
+      const transient = error instanceof SyntaxError || SHARING_ERRORS.includes(error.code);
+      if (!transient || attempt >= 3) throw error;
+      await new Promise((resolve) => setTimeout(resolve, 20 * (attempt + 1)));
+    }
   }
 }
 
@@ -59,24 +69,31 @@ let tmpCounter = 0;
  * The pipeline rewrites progress.json and the application metadata while the UI
  * polls them every couple of seconds; an in-place truncate-then-write can be read
  * half-finished, which surfaces as "Unexpected end of JSON input".
+ *
+ * Windows refuses the rename while a reader still holds the destination open, so we
+ * back off and retry. If it keeps refusing, fall back to the plain in-place write
+ * rather than failing: a torn read is recoverable (readJson retries), a lost write
+ * is not.
  */
 export async function writeJson(filePath, data) {
   await ensureDir(path.dirname(filePath));
+  const json = JSON.stringify(data, null, 2);
   const tmp = `${filePath}.${process.pid}.${tmpCounter++}.tmp`;
-  await fs.promises.writeFile(tmp, JSON.stringify(data, null, 2), "utf8");
-  for (let attempt = 0; ; attempt++) {
+  await fs.promises.writeFile(tmp, json, "utf8");
+  for (let attempt = 0; attempt < 8; attempt++) {
     try {
       await fs.promises.rename(tmp, filePath);
       return;
     } catch (error) {
-      // Windows briefly denies the rename while a reader holds the target open.
-      if (attempt >= 5 || !["EPERM", "EBUSY", "EACCES"].includes(error.code)) {
+      if (!SHARING_ERRORS.includes(error.code)) {
         await fs.promises.rm(tmp, { force: true });
         throw error;
       }
-      await new Promise((resolve) => setTimeout(resolve, 30));
+      await new Promise((resolve) => setTimeout(resolve, 10 + attempt * 15));
     }
   }
+  await fs.promises.rm(tmp, { force: true });
+  await fs.promises.writeFile(filePath, json, "utf8");
 }
 
 export async function createApplication(name) {
