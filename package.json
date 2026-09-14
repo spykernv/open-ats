@@ -1,0 +1,39 @@
+{
+  "name": "open-ats",
+  "version": "1.0.0",
+  "description": "A local, open-source reconstruction of an AI recruiting pipeline — run your own application through it before a real ATS does.",
+  "type": "module",
+  "main": "server/index.js",
+  "license": "MIT",
+  "keywords": [
+    "ats",
+    "recruiting",
+    "resume",
+    "cv",
+    "job-application",
+    "claude",
+    "agents",
+    "local-first"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node --watch server/index.js",
+    "bridge": "node bridge/cli.mjs wait",
+    "bridge:status": "node bridge/cli.mjs status",
+    "demo": "node demo/seed.mjs",
+    "test": "node test/e2e.mjs",
+    "test:bridge": "node test/bridge.mjs"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.110.0",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.2",
+    "multer": "^1.4.5-lts.1",
+    "pdf-parse": "^1.1.1",
+    "pdfkit": "^0.20.2",
+    "zod": "^3.24.1"
+  }
+}

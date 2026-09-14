@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>open-ats — analyse de candidature</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="shell">
+    <aside class="rail">
+      <a class="brand" href="#/">
+        <span class="brand-mark">ATS</span>
+        <span class="brand-text">open-ats</span>
+      </a>
+
+      <nav class="nav">
+        <a href="#/" data-nav="dashboard"><span class="ico">▤</span> Candidatures</a>
+        <a href="#/new" data-nav="new"><span class="ico">＋</span> Nouvelle analyse</a>
+        <a href="#/console" data-nav="console"><span class="ico">✦</span> Console Claude</a>
+      </nav>
+
+      <div class="rail-spacer"></div>
+
+      <section class="bridge-card" id="bridge-card">
+        <header>
+          <span class="dot" id="bridge-dot"></span>
+          <span id="bridge-title">Pont Claude</span>
+        </header>
+        <p class="bridge-state" id="bridge-state">Connexion…</p>
+        <ul class="bridge-jobs" id="bridge-jobs"></ul>
+        <div class="bridge-hint" id="bridge-hint"></div>
+      </section>
+
+      <div class="engine">
+        <label for="engine-select">Moteur</label>
+        <select id="engine-select"></select>
+        <p class="engine-note" id="engine-note"></p>
+      </div>
+    </aside>
+
+    <main id="app" class="main"></main>
+  </div>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

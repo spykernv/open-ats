@@ -1,0 +1,290 @@
+<div align="center">
+
+# open-ats
+
+**An AI recruiting system, rebuilt by hand and opened up.**
+*Run your application through the machine — before a real one runs it.*
+
+[![MIT licence](https://img.shields.io/badge/licence-MIT-6c7dff)](LICENSE)
+[![Node ≥ 20](https://img.shields.io/badge/node-%E2%89%A5%2020-3c873a)](https://nodejs.org)
+[![100% local](https://img.shields.io/badge/data-100%25%20local-46d6c0)](#your-data-never-leaves-your-machine)
+[![No API key](https://img.shields.io/badge/API%20key-optional-f5a623)](#engines)
+
+🇫🇷 [Lire en français](README.md)
+
+<img src="docs/screenshots/08-pipeline.png" alt="The 16-agent pipeline running live" width="820">
+
+</div>
+
+> **Note** — the interface is in French, because I built it for myself first.
+> The prompts, the code and this documentation are in English. Translating the UI
+> is [a good first issue](https://github.com/spykernv/open-ats/issues) if you fancy it.
+
+---
+
+## Why this exists
+
+When you apply somewhere, your CV is read by software first. It gets parsed, scored, ranked, filtered — and in most cases a human only sees it after that sorting has happened. The process is invisible to you. All you get is the outcome: a polite rejection, or silence.
+
+That frustrated me for a long time. Not because it's unfair — a recruiter facing 800 applications genuinely needs to sort them — but because **it's a black box that candidates are asked to submit to without ever being shown the inside.**
+
+So I did the opposite. I rebuilt the black box in the open, from what is publicly known about how ATS and AI screening tools work: posting parsing, requirement matrices, multi-filter scoring, the twenty-second review, benchmarking against the likely applicant pool. Then I put myself through it.
+
+**What I found surprised me.** Most of my applications weren't failing on a missing skill — they were failing on wording. I wrote "automated weekly reporting" where the role was looking for "data analysis". Same work, different vocabulary, filter missed. Having a system tell me that plainly, requirement by requirement, evidence by evidence, changed how I apply.
+
+Since then this system has opened doors I didn't expect, and introduced me to remarkable people. I'm publishing it because I have no reason to keep it to myself: if you're job hunting right now, it's yours.
+
+---
+
+## What it does
+
+You drop in three things — **the job posting** (screenshots, PDF or plain text), **your CV**, and **your cover letter** if you have one. Sixteen agents then take turns to:
+
+1. **Understand the role** — reconstruct the posting and extract a requirement matrix (`MUST_HAVE`, `STRONG_SIGNAL`, `NICE_TO_HAVE`, context, culture), separating what is stated explicitly from what is merely inferred.
+2. **Understand the company** — web research, with every finding tagged `FACT`, `STRONG_INFERENCE` or `WEAK_INFERENCE` and sourced. Then model *why this role exists* and what the realistic ideal candidate looks like.
+3. **Score you** — out of 100, broken down into the four filters that match the four moments an application dies: the **automated screen (ATS)**, the **recruiter screen**, the **hiring manager**, and **strategic fit**.
+4. **Attack you** — an adversarial agent looks for reasons to reject you in twenty seconds; another benchmarks you against the likely applicant pool.
+5. **Rewrite** — an improvement plan ranked by return on effort, then a rewritten CV and cover letter.
+6. **Verify** — and this is the heart of it: a quality controller re-reads every rewritten sentence and **blocks anything your original CV doesn't prove.**
+
+You fix things, upload a v2, and the system compares: what improved, what regressed, what still blocks. Until it tells you either *this is ready*, or — just as usefully — *the document has hit its ceiling, the remaining gap is a real experience gap, stop rewriting and change channel.*
+
+---
+
+## The rule that matters
+
+> **The system is not allowed to invent.**
+
+Before any rewriting, an agent extracts an **Evidence Bank** from your CV: the list of what you can actually prove. Every sentence produced afterwards must point back to one of those pieces of evidence. The quality controller blocks the rest — and when it can't phrase something without knowing, it leaves an explicit marker:
+
+```
+[TO COMPLETE: which language this project used — I cannot infer it from the CV]
+```
+
+This is deliberately frustrating. It is also the only setting that makes the tool useful: an optimised application that collapses at the first interview question has wasted your time and the recruiter's.
+
+**This is not a keyword stuffer.** It refuses to insert the vocabulary of a domain you haven't worked in, even when doing so would mechanically raise the score. It exists to help you **say what is true, better** — not to say something else.
+
+---
+
+## Getting started
+
+```bash
+git clone https://github.com/spykernv/open-ats.git
+cd open-ats
+npm install
+```
+
+### See what it looks like, in 2 minutes, consuming nothing
+
+`mock` mode fills the pipeline with canned data — ideal for touring the interface before deciding whether the project is for you.
+
+```bash
+LLM_PROVIDER=mock MOCK_DELAY_MS=1200 npm start
+```
+
+Then, in a second terminal:
+
+```bash
+npm run demo
+```
+
+A complete fictional application is created and analysed end to end. Open **http://localhost:3777**.
+
+### For real
+
+**No API key needed.** By default the engine is **your own agent session**: the app drops each stage into a file queue, your agent picks it up, does the work itself (reading screenshots and PDFs, searching the web, writing, producing JSON), and answers.
+
+```bash
+npm start
+```
+
+Then, **inside your Claude Code session** (or any agent — see below):
+
+```bash
+npm run bridge
+```
+
+Open **http://localhost:3777**. The sidebar tells you live whether a session is listening, what it's working on, and what's queued. If the bridge disconnects, the pipeline **waits** — it doesn't fail. Restart `npm run bridge` and it resumes.
+
+---
+
+## Any agent can run it
+
+The bridge isn't an integration. It's **a directory of files**.
+
+```
+bridge/queue/<jobId>/
+├── job.json      ← stage metadata (title, files to read, web search expected?)
+├── prompt.md     ← the full prompt
+├── schema.json   ← the JSON Schema the answer must satisfy
+└── result.json   ← what the agent writes  (that's it)
+```
+
+The server validates `result.json` against that stage's Zod schema. If it doesn't conform, it automatically republishes a repair job containing the exact error. No secrets travel through it, no sub-process is spawned: **any agent that can read and write files can be the engine.** `bridge/cli.mjs` (`wait` / `status` / `show` / `answer` / `fail`) is just a convenience on top.
+
+---
+
+## How it works
+
+```mermaid
+flowchart LR
+  IN["📄 Posting<br/>📄 CV<br/>✉️ Letter"] --> P1
+
+  subgraph P1["1 · Understand"]
+    direction TB
+    a1["job_parser<br/><i>posting → requirements</i>"] --> a2["company_researcher<br/><i>web, sourced findings</i>"]
+    a2 --> a3["recruiting_modeler<br/><i>why this role exists</i>"]
+    a3 --> a4["opportunity_scorer"]
+  end
+
+  subgraph P2["2 · Prove"]
+    direction TB
+    b1["cv_extractor<br/><i>Evidence Bank</i>"] --> b2["requirement_mapper<br/><i>requirement → evidence</i>"]
+  end
+
+  subgraph P3["3 · Judge"]
+    direction TB
+    c1["cv_evaluator<br/><i>ATS · HR · HM · Fit</i>"] --> c2["adversarial_reviewer"]
+    c1 --> c3["competitive_benchmark"]
+    c1 --> c4["letter_evaluator"]
+  end
+
+  subgraph P4["4 · Rewrite"]
+    direction TB
+    d1["improvement_planner<br/><i>ranked by ROI</i>"] --> d2["cv_optimizer"]
+    d1 --> d3["letter_optimizer"]
+    d2 --> d4["quality_controller<br/><i>blocks the unproven</i>"]
+    d3 --> d4
+  end
+
+  subgraph P5["5 · Decide"]
+    direction TB
+    e1["version_comparator"] --> e2["verdict + report"]
+  end
+
+  P1 --> P2 --> P3 --> P4 --> P5
+```
+
+The final verdict (`APPLY NOW` / `IMPROVE FIRST` / `LOW PRIORITY` / `DO NOT APPLY`) is **computed in code**, not by the model — same input, same output, every time. Same for the Markdown report and the PDF exports: they're assembled from the JSON artifacts with no model call.
+
+Shared stages (posting, company research, thesis, opportunity) are computed once per application and reused across versions.
+
+---
+
+## The interface
+
+<table>
+<tr>
+<td width="50%"><img src="docs/screenshots/02-synthese.png" alt="Scores and verdict"></td>
+<td width="50%"><img src="docs/screenshots/03-requirements.png" alt="Requirement to evidence matrix"></td>
+</tr>
+<tr>
+<td><b>Summary</b> — seven scores, the verdict, the change since the previous version, and the twenty-second rejection risks.</td>
+<td><b>Requirements &amp; Evidence</b> — every requirement in the posting against what your CV actually proves, with the crucial distinction between a <i>positioning gap</i> (fixable by rewriting) and an <i>actual experience gap</i> (not fixable).</td>
+</tr>
+<tr>
+<td><img src="docs/screenshots/04-cv-optimise.png" alt="Optimised CV and integrity check"></td>
+<td><img src="docs/screenshots/01-dashboard.png" alt="Applications dashboard"></td>
+</tr>
+<tr>
+<td><b>Optimised CV</b> — the rewrite, a before/after for each bullet, and the integrity check that approved (or blocked) every sentence.</td>
+<td><b>Dashboard</b> — every application ranked by score, with its verdict, version and submission status.</td>
+</tr>
+</table>
+
+<details>
+<summary><b>See the other screens</b> (new analysis, company research, console)</summary>
+<br>
+
+| | |
+|---|---|
+| <img src="docs/screenshots/06-nouvelle-analyse.png" alt="New analysis"> | **New analysis** — drop the posting, the CV, the letter. The letter is optional: without one, the system drafts it from your Evidence Bank. |
+| <img src="docs/screenshots/05-recherche.png" alt="Company research"> | **Company & Thesis** — the web research, each finding tagged by confidence level and sourced, then the recruiting model. |
+| <img src="docs/screenshots/07-console.png" alt="Console"> | **Console** — a free-form question to your agent, with access to your analysis folders: "compare these two applications", "re-read this bullet". |
+
+*(Screenshots taken in demo mode — the `[MOCK]` markers are the offline mode's canned data.)*
+
+</details>
+
+---
+
+## Engines
+
+The engine can be switched **live** from the interface, without restarting the server.
+
+| Engine | What it is | API key |
+|---|---|:---:|
+| **`claude-session`** *(default)* | Your agent session runs each stage through the bridge. You see everything, you can step in. | no |
+| `claude-cli` | Headless `claude -p` sub-process. Same subscription, unsupervised. Write tools disabled for safety. | no |
+| `anthropic` | Direct Anthropic API: native structured outputs, streaming, adaptive thinking. | yes |
+| `mock` | Canned data, to explore the interface or develop without consuming anything. | no |
+
+Adding an engine means **adding one file** under `server/llm/`. Pipeline messages are engine-agnostic (`{type: "text" | "file"}`); each provider decides how to materialise the files.
+
+---
+
+## Your data never leaves your machine
+
+This isn't negotiable, so it's wired into the project rather than promised in a doc:
+
+- Everything lives in `applications/<id>/` on **your disk**. No third-party service, no database, no telemetry.
+- `applications/`, `bridge/queue/`, `bridge/archive/` and `.env` are **git-ignored**. You can't commit your CV by accident.
+- In `claude-session` mode the bridge only moves local files — no secret passes through it.
+- PDF exports are rendered locally by `pdfkit`. No headless browser, no conversion service.
+
+This repository contains no real application: the only dataset is fictional and generated by `npm run demo`.
+
+---
+
+## Going further
+
+- **[docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)** — the map of the code, the 16 stages in detail, the HTTP API, and how to plug in your own engine or search provider.
+- `server/prompts/*.md` — **the prompts are in plain sight, one file per agent.** That's where the real substance lives: read `_core_rules.md` first, it's the integrity contract every agent shares.
+
+### Tests
+
+```bash
+npm run test:bridge
+```
+Tests the bridge alone (job queue, schema validation, automatic repair). No server, no session required.
+
+```bash
+LLM_PROVIDER=mock npm start     # then, in another terminal:
+npm test
+```
+End to end: creation, 16-stage pipeline, report, v2 upload, re-evaluation, comparison. In mock mode it consumes nothing.
+
+---
+
+## Take it, break it, improve it
+
+MIT licensed — do what you like with it. A few directions if you're tempted:
+
+- **Retune the prompts for your field.** They're calibrated for junior business and data profiles. A senior profile, an engineering role or a non-French market deserve different settings — it's all in `server/prompts/`.
+- **Plug in your agent.** The bridge is just the filesystem: if your agent reads and writes files, it can be the engine.
+- **Add a filter.** The four-filter model reflects my understanding of hiring. Yours may well be better.
+
+Issues and PRs are welcome, and first-hand feedback even more so — especially if you've used it for real. If part of the code isn't clear, that's on me: open an issue and I'll fix it.
+
+---
+
+## One word if you're job hunting
+
+Looking for work is exhausting, and an automated rejection never tells you why. That silence is what this tool tries to fill: not to make you look like someone else, but so you finally know **where you actually stand** — and can spend your energy where it changes something.
+
+Sometimes the most useful answer this system gives is "this application is structurally weak, stop rewriting". That stings for a moment. It saves weeks.
+
+Good luck, genuinely. You are worth more than what a first automated screen says about you.
+
+---
+
+<div align="center">
+
+**Jonathan Naal** · [LinkedIn](https://www.linkedin.com/in/jonathannaal/)
+
+If this project is useful to you, tell me — that's the best thanks there is.
+
+<sub>MIT · Not affiliated with any ATS vendor or model provider.</sub>
+
+</div>

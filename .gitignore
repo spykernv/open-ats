@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+
+# YOUR DATA — never leaves your machine, never enters git.
+# Every application you analyse lives here: job posting, CV, cover letter,
+# analysis artifacts, reports and logs.
+applications/
+
+# Agent bridge: job queue, archived jobs (they embed your CV), heartbeat
+bridge/queue/
+bridge/archive/
+bridge/agent.json
+
+# Misc
+*.log
+.DS_Store
+Thumbs.db
