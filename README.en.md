@@ -24,15 +24,17 @@
 
 ## Why this exists
 
-When you apply somewhere, your CV is read by software first. It gets parsed, scored, ranked, filtered, and in most cases a human only sees it after that sorting has happened. The process is invisible to you. All you get is the outcome: a polite rejection, or silence.
+Everyone reaches a point where they have to tell the story of their career. A new graduate starting out, a professional realigning their path, or simply someone looking for the words today's market actually uses: the task is the same every time. Compress years of work into a single page, and make that page say at a glance who you are and where your value lies.
 
-That frustrated me for a long time. Not because it's unfair, a recruiter facing 800 applications genuinely needs to sort them, but because **it's a black box that candidates are asked to submit to without ever being shown the inside.**
+It is hard, and it is judged fast. Your CV is read first by software that parses it, scores it and ranks it. Then by a person, in about twenty seconds. That is not unfair: a recruiter facing 800 applications needs to sort them. But it is opaque. You never see the criteria, only the outcome. And it matters even when the door is already ajar: a referral gets you into the room, it does not yet say what you are worth once you are in.
 
-So I did the opposite. I rebuilt the black box in the open, from what is publicly known about how ATS and AI screening tools work: posting parsing, requirement matrices, multi-filter scoring, the twenty-second review, benchmarking against the likely applicant pool. Then I put myself through it.
+So I rebuilt the black box in the open, from what is publicly known about how ATS and AI screening tools work: posting parsing, requirement matrices, multi-filter scoring, the twenty-second review, benchmarking against the likely applicant pool. Then I put myself through it.
 
-**What I found surprised me.** Most of my applications weren't failing on a missing skill, they were failing on wording. I wrote "automated weekly reporting" where the role was looking for "data analysis". Same work, different vocabulary, filter missed. Having a system tell me that plainly, requirement by requirement, evidence by evidence, changed how I apply.
+**Think of it as a tailor.** A good tailor does not disguise you: they take your measurements, cut into the cloth you already have, and bring out your best. Then they tell you how to adjust the cut for where you want to go, and they tell you honestly when a piece does not suit you. That is what open-ats does with your career: it measures, it adjusts, and it shows you what genuinely fits you and what does not.
 
-Since then this system has opened doors I didn't expect, and introduced me to remarkable people. I'm publishing it because I have no reason to keep it to myself: if you're job hunting right now, it's yours.
+For me, the first thing it surfaced was a vocabulary gap, not a skills gap. I was writing "automated weekly reporting" where the role was looking for "data analysis". Same work, different words, signal lost. Having a system say so plainly, requirement by requirement, evidence by evidence, changed how I present myself.
+
+Since then it has opened doors I did not expect and introduced me to remarkable people. I am publishing it because I have no reason to keep it to myself: it is yours.
 
 ---
 

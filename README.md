@@ -20,15 +20,17 @@
 
 ## Pourquoi ce projet existe
 
-Quand vous postulez quelque part, votre CV est d'abord lu par un logiciel. Il est découpé, scoré, classé, filtré, et dans la grande majorité des cas, une personne ne le voit qu'après ce tri. Ce processus est invisible pour vous. Vous n'en recevez que le résultat : un mail de refus poli, ou rien du tout.
+On arrive tous à un moment où il faut raconter son parcours. Jeune diplômé qui se lance, professionnel qui veut réaligner sa trajectoire, ou simplement quelqu'un qui cherche les mots justes du marché d'aujourd'hui : dans tous les cas l'exercice est le même. Condenser des années de travail en une page, et faire que cette page dise en un coup d'œil qui vous êtes et où se trouve votre valeur.
 
-Ça m'a longtemps frustré. Pas parce que c'est injuste, un recruteur qui reçoit 800 candidatures a besoin d'un tri, mais parce que **c'est une boîte noire à laquelle on demande aux candidats de se soumettre sans jamais leur en montrer l'intérieur.**
+C'est difficile, et ça se joue vite. Votre CV est d'abord lu par un logiciel qui le découpe, le score et le classe. Puis par une personne, en une vingtaine de secondes. Ce n'est pas injuste : un recruteur qui reçoit 800 candidatures a besoin d'un tri. Mais c'est opaque. Vous ne voyez jamais les critères, seulement le résultat. Et ça compte même quand la porte est déjà entrouverte : une cooptation ou une recommandation vous fait entrer dans la pièce, elle ne dit pas encore ce que vous valez une fois dedans.
 
-Alors j'ai fait l'inverse. J'ai reconstruit la boîte noire, en clair, à partir de ce qu'on sait publiquement du fonctionnement des ATS et des outils de présélection par IA : le parsing de l'annonce, la matrice de critères, le scoring multi-filtres, la revue en 20 secondes, le benchmark face au vivier. Puis je me suis mis dedans.
+Alors j'ai reconstruit la boîte noire, en clair, à partir de ce qu'on sait publiquement du fonctionnement des ATS et des outils de présélection par IA : le parsing de l'annonce, la matrice de critères, le scoring multi-filtres, la revue en 20 secondes, le benchmark face au vivier. Puis je me suis mis dedans.
 
-**Ce que j'ai découvert m'a surpris.** La plupart de mes candidatures ne tombaient pas sur un manque de compétence, elles tombaient sur un défaut de formulation. Je disais « automatisation du reporting hebdomadaire » là où le poste cherchait « analyse de données ». Même travail, vocabulaire différent, filtre raté. Voir un système me le dire noir sur blanc, critère par critère, preuve par preuve, a changé ma façon de candidater.
+**Voyez-le comme un tailleur.** Un bon tailleur ne vous déguise pas : il prend vos mesures, taille dans le tissu que vous avez déjà, et fait ressortir ce que vous avez de meilleur. Puis il vous dit comment ajuster la coupe selon l'endroit où vous voulez aller, et il vous dit franchement quand une pièce ne vous va pas. C'est ce que fait open-ats avec votre parcours : il mesure, il ajuste, et il vous montre ce qui vous correspond vraiment et ce qui ne vous correspond pas.
 
-Depuis, ce système m'a ouvert des portes que je n'espérais pas, et m'a fait rencontrer des gens remarquables. Je le publie parce que je n'ai aucune raison de le garder pour moi : si vous cherchez un poste en ce moment, il est à vous.
+Le premier enseignement, chez moi, a été un décalage de vocabulaire et non de compétence. J'écrivais « automatisation du reporting hebdomadaire » là où le poste cherchait « analyse de données ». Même travail, mots différents, signal perdu. Voir un système me le dire noir sur blanc, critère par critère, preuve par preuve, a changé ma façon de me présenter.
+
+Depuis, ce système m'a ouvert des portes que je n'espérais pas et m'a fait rencontrer des gens remarquables. Je le publie parce que je n'ai aucune raison de le garder pour moi : il est à vous.
 
 ---
 
