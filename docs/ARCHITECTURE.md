@@ -1,7 +1,7 @@
 # Architecture
 
 Technical companion to the [README](../README.md). Everything here describes the code as it
-stands — if something drifts, the code wins, and an issue is welcome.
+stands. If something drifts, the code wins, and an issue is welcome.
 
 ---
 
@@ -25,13 +25,13 @@ prompt.
 
 **3. The engine is a detail.**
 Pipeline messages are `{ type: "text" | "file", path, label }`. Each provider materialises
-files its own way — the API provider sends base64 image/document blocks, the CLI provider
+files its own way: the API provider sends base64 image/document blocks, the CLI provider
 passes paths and lets the agent's own Read tool open them, the bridge hands the agent a list
 of local paths. Adding an engine is adding one file.
 
 **4. State is files on disk.**
 No database, no daemon, no session store. An application is a directory; a bridge job is a
-directory. You can read, diff, back up and delete everything with a file manager — which is
+directory. You can read, diff, back up and delete everything with a file manager, which is
 also what makes the privacy guarantee checkable rather than promised.
 
 ---
@@ -62,7 +62,7 @@ server/
     artifacts.js           Artifact loading helpers
   prompts/
     _core_rules.md         The integrity contract shared by every agent
-    <agent>.md             One prompt per agent — the substance of the project
+    <agent>.md             One prompt per agent, the substance of the project
   pipeline/
     orchestrator.js        The 16 stages, parallelism, quality retry
     schemas.js             Zod schemas for every structured output
@@ -82,9 +82,9 @@ web/                       Vanilla ES modules, no build step
 
 demo/seed.mjs              Creates one fictional application and analyses it
 test/e2e.mjs               Full workflow against a running server
-test/bridge.mjs            Bridge only — no server, no session
+test/bridge.mjs            Bridge only, no server, no session
 
-applications/<id>/         YOUR DATA — git-ignored
+applications/<id>/         YOUR DATA, git-ignored
   input/job/               The posting (screenshots, PDF or text)
   input/v1..vN/            CV + letter, per version
   research/                Company research memo and notes
@@ -103,7 +103,7 @@ applications/<id>/         YOUR DATA — git-ignored
 | 1 | Posting | `job_parser` | Normalised posting + requirement matrix (`MUST_HAVE` / `STRONG_SIGNAL` / `NICE_TO_HAVE` / `CONTEXT` / `CULTURAL_BEHAVIORAL`, explicit vs inferred, estimated weight) |
 | 2 | Company research | `company_research_search` → `company_researcher` | Findings tagged `FACT` / `STRONG_INFERENCE` / `WEAK_INFERENCE`, each with a source |
 | 3 | Recruiting thesis | `recruiting_modeler` | Mission thesis, top 5 business problems, realistic ideal candidate |
-| 4 | Opportunity | `opportunity_scorer` | Score /100 — is this posting worth your effort at all |
+| 4 | Opportunity | `opportunity_scorer` | Score /100, is this posting worth your effort at all |
 | 5 | Evidence Bank | `cv_extractor` | Everything the CV actually proves, as addressable items (`E1`, `E2`, …) |
 | 6 | Mapping | `requirement_mapper` | Requirement → evidence, strength, and `POSITIONING_GAP` vs `ACTUAL_EXPERIENCE_GAP` |
 | 7 | Evaluation | `cv_evaluator` | Score /100 across four filters: ATS, HR screen, hiring manager, strategic fit |
@@ -115,9 +115,9 @@ applications/<id>/         YOUR DATA — git-ignored
 | 13 | Letter rewrite | `letter_optimizer` | Rewritten letter + key changes |
 | 14 | Quality control | `quality_controller` | `PASS` / `FAIL` + unsupported claims. A `FAIL` triggers one regeneration |
 | 15 | Comparison | `version_comparator` | Improved / regressed / still blocking, and the stop condition (v ≥ 2 only) |
-| 16 | Report | — | Deterministic verdict + Markdown report + exports |
+| 16 | Report | (code) | Deterministic verdict + Markdown report + exports |
 
-Stages 8, 9 and 10 run in parallel, as do 12 and 13. Stages 1–4 are **shared**: computed once per
+Stages 8, 9 and 10 run in parallel, as do 12 and 13. Stages 1-4 are **shared**: computed once per
 application and reused by every later version, so a v2 only re-runs what depends on the CV.
 
 Stop conditions on re-evaluation: `APPLICATION_READY` (score ≥ 88, or marginal gains ≤ 2 points)
@@ -134,7 +134,7 @@ protocol is deliberately boring:
 1. The server writes `bridge/queue/<jobId>/` containing `job.json` (title, application, files to
    read, whether web search is expected), `prompt.md` (the complete prompt) and `schema.json`
    (the JSON Schema derived from that stage's Zod schema).
-2. The agent claims the job — `claim()` is atomic, so several listeners can't collide — reads the
+2. The agent claims the job (`claim()` is atomic, so several listeners can't collide), reads the
    prompt and the referenced files itself, does the work, and writes `result.json`.
 3. The server validates against the Zod schema. On failure it republishes a repair job containing
    the exact validation error; **one** repair attempt is allowed.
@@ -175,7 +175,7 @@ Everything the frontend does, you can do with `curl`.
 | `POST` | `/api/applications/:id/cancel` | Stop a running analysis |
 | `POST` | `/api/applications/:id/versions` | Upload a v(n+1) (multipart: `cv`, `letter`) |
 | `GET` | `/api/applications/:id/report?version=N` | Full Markdown report |
-| `POST` | `/api/applications/:id/submit` | Mark as sent (`{ submitted, version }`) — reversible |
+| `POST` | `/api/applications/:id/submit` | Mark as sent (`{ submitted, version }`), reversible |
 | `GET` | `/api/applications/:id/export/:kind?version=N&format=md\|pdf` | `kind` = `synthesis` or `plan` |
 | `GET` / `POST` | `/api/bridge`, `/api/tasks` | Bridge state and free-form Console requests |
 | `POST` | `/api/settings` | Hot-swap the engine |
@@ -198,14 +198,14 @@ improvement plan are also written automatically at the end of every analysis, in
 Your job is to decide how `{type: "file"}` messages become something your model can see.
 
 **Add a search provider.** `server/research/research_provider.js` is the seam. Anything that
-returns sourced text works — an MCP server, SerpAPI, a local index.
+returns sourced text works: an MCP server, SerpAPI, a local index.
 
 **Retune the prompts.** `server/prompts/` is plain Markdown, one file per agent. Two places
 currently assume a junior/VIE profile and are worth adjusting for other markets: the
-`vie_details` field in `job_parser`, and `recruiting_modeler`'s assumption of a 0–2 years ideal
+`vie_details` field in `job_parser`, and `recruiting_modeler`'s assumption of a 0-2 years ideal
 candidate. Both already ask the agent to flag the assumption when the posting contradicts it.
 
-**Change the schemas.** `server/pipeline/schemas.js` must import from **`zod/v4`** — the Anthropic
+**Change the schemas.** `server/pipeline/schemas.js` must import from **`zod/v4`**: the Anthropic
 SDK's `zodOutputFormat` helper and `z.toJSONSchema` both break with the classic v3 API. This has
 been fixed once; please don't regress it.
 
@@ -220,5 +220,5 @@ been fixed once; please don't regress it.
   spawns with `shell: true` (the npm shim is a `.cmd`).
 - **`claude-cli` and expired OAuth.** A 401 "OAuth token expired" means you need to run `claude`
   and `/login` again; the error is mapped explicitly so you don't have to guess.
-- **The bridge dies with the session.** That's expected — the UI shows it, and `npm run bridge`
+- **The bridge dies with the session.** That's expected: the UI shows it, and `npm run bridge`
   brings it back. Analyses in flight wait rather than fail.
