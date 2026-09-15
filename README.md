@@ -289,8 +289,6 @@ Pour moi, ça a été un excellent complément à l'écriture de ma thèse sur u
 
 C'est ça que je vous souhaite d'y trouver. Le CV optimisé n'est que le sous-produit.
 
-Si le sujet vous intéresse, ma thèse est en cours de modération sur HAL et sera disponible ici : <https://hal.science/view/index/docid/5735731>
-
 ---
 
 <div align="center">
